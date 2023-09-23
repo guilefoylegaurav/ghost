@@ -33,7 +33,7 @@ if __name__ == "__main__":
     chat_history} Question: {question}"""
 
     arguments = sys.argv
-    chat_mode_flag = "short" if len(arguments) == 2 else "long"
+    chat_mode_flag = "long"
     chat_mode_factory = ChatModeFactory()
     response_strategy = chat_mode_factory.get_chat_mode(chat_mode_flag)
     shell = Shell(response_strategy)

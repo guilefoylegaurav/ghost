@@ -20,6 +20,8 @@ class ProlongedChatMode(ChatMode):
     def respond(self, agent) -> None:
         while True:
             question = input(">")
+            if question == "exit":
+                return
             try:
                 print(agent.run(question))
             except Exception as e:
