@@ -1,30 +1,31 @@
+import os
+
 from langchain.chat_models import ChatOpenAI
-from langchain.agents import initialize_agent
-from langchain.agents import AgentType
 from langchain.tools import ShellTool
 from langchain.callbacks import HumanApprovalCallbackHandler
 from langchain.callbacks.streaming_stdout import StreamingStdOutCallbackHandler
 from dotenv import find_dotenv, load_dotenv
-from langchain.agents import ZeroShotAgent, Tool, AgentExecutor
+from langchain.agents import ZeroShotAgent, AgentExecutor
 from langchain.memory import ConversationBufferMemory
-from langchain.llms import OpenAI
 from langchain.chains import LLMChain
-from langchain.utilities import GoogleSearchAPIWrapper
 import warnings
 
 warnings.filterwarnings("ignore")
 load_dotenv(find_dotenv())
 
 
-def _get_agent():
-    llm = ChatOpenAI(callbacks=[StreamingStdOutCallbackHandler()], temperature=0.5)
+def _get_agent_chain():
+    llm = ChatOpenAI(callbacks=[StreamingStdOutCallbackHandler()], temperature=0.2)
+    prefix = f"""Have a conversation with a human, answering the following questions as best you can. Ensure the 
+    commands are for the OS {os.environ.get("OS_NAME")} and the shell {os.environ.get("SHELL_NAME")}. """
+    suffix = """Begin! {chat_history} Question: {input} {agent_scratchpad}"""
 
     def _approve(_input: str) -> bool:
         tokens = _input.split(' ')
         if len(tokens) > 0 and tokens[0] == 'echo':
             return True
         msg = (
-            "Approve (y/Y)?"
+            "\nLets run this command?"
         )
         msg += "\n\n" + _input + "\n"
         resp = input(msg)
@@ -35,15 +36,25 @@ def _get_agent():
     shell_tool.description = shell_tool.description + f"args {shell_tool.args}".replace(
         "{", "{{"
     ).replace("}", "}}")
-
-    return initialize_agent(
-        [shell_tool], llm, agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=False
+    tools = [shell_tool]
+    prompt = ZeroShotAgent.create_prompt(
+        tools,
+        prefix=prefix,
+        suffix=suffix,
+        input_variables=["input", "chat_history", "agent_scratchpad"],
     )
+    memory = ConversationBufferMemory(memory_key="chat_history")
+    llm_chain = LLMChain(llm=llm, prompt=prompt)
+    agent = ZeroShotAgent(llm_chain=llm_chain, tools=tools, verbose=True)
+    agent_chain = AgentExecutor.from_agent_and_tools(
+        agent=agent, tools=tools, verbose=True, memory=memory
+    )
+    return agent_chain
 
 
 class Shell:
     def __init__(self, response_strategy) -> None:
-        self.agent = _get_agent()
+        self.agent = _get_agent_chain()
         self.response_strategy = response_strategy
 
     def repl(self):

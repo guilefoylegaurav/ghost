@@ -24,14 +24,6 @@ if __name__ == "__main__":
     else:
         os.environ["SHELL_NAME"] = 'Bash'
 
-    PROMPT_TEMPLATE = """If someone asks you to perform a task, your job is to come up with a series of shell 
-    commands that will perform the task. Ensure the commands are for the OS {os_name} and the shell {shell_name} Make 
-    sure to reason step by step, using this format: Question: "copy the files in the directory named 'target' into a 
-    new directory at the same level as target called 'myNewDirectory'" I need to take the following actions: - List 
-    all files in the directory - Create a new directory - Copy the files from the first directory into the second 
-    directory ```ComPmand: ls mkdir myNewDirectory cp -r target/* myNewDirectory ``` That is the format. Begin! {
-    chat_history} Question: {question}"""
-
     arguments = sys.argv
     chat_mode_flag = "long"
     chat_mode_factory = ChatModeFactory()

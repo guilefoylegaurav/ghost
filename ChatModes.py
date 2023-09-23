@@ -23,6 +23,6 @@ class ProlongedChatMode(ChatMode):
             if question == "exit":
                 return
             try:
-                print(agent.run(question))
+                print(agent.run(input=question))
             except Exception as e:
                 print(e.args[0].split(':', 1)[-1].strip())

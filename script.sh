@@ -7,7 +7,7 @@ fi
 
 export OPENAI_API_KEY="$1"
 
-venv_name="langchain_env"
+venv_name="myenv"
 
 if [ ! -d "$venv_name" ]; then
     python3 -m venv "$venv_name"
