@@ -1,0 +1,52 @@
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore virtual environment directories
+venv/
+myenv/
+env/
+*.env/
+
+# Ignore local development settings
+*.local_settings.py
+
+# Ignore log and temp files
+*.log
+*.swp
+*.swo
+*.tmp
+
+# Ignore database files
+*.db
+*.sqlite3
+
+# Ignore IDE and editor-specific files
+.vscode/
+.idea/
+*.code-workspace
+
+# Ignore OS-generated files
+.DS_Store
+Thumbs.db
+
+# Ignore configuration files with secrets
+*.config
+
+# Ignore pipenv files
+Pipfile
+Pipfile.lock
+
+# Ignore coverage reports
+htmlcov/
+.coverage
+
+# Ignore compiled files
+*.pyo
+*.pyd
+
+# Ignore Jupyter Notebook checkpoints
+.ipynb_checkpoints/
+
+# Ignore user-specific Python interpreter settings
+.python-version
