@@ -1,4 +1,5 @@
 import os
+import sys
 
 
 class ChatMode:
@@ -9,8 +10,10 @@ class ChatMode:
 class ShortChatMode(ChatMode):
 
     def respond(self, agent) -> None:
-        agent.run({"question": self.question, "shell_name": os.environ.get["SHELL_NAME"],
-                   "os_name": os.environ.get["OS_NAME"]})
+        try:
+            print(agent.run(sys.argv[1]))
+        except Exception as e:
+            print(e.args[0].split(':', 1)[-1].strip())
 
 
 class ProlongedChatMode(ChatMode):
