@@ -6,6 +6,7 @@ __pycache__/
 venv/
 myenv/
 env/
+langchain_env/
 *.env
 
 # Ignore local development settings
