@@ -1,42 +1,40 @@
-from langchain.chat_models import ChatOpenAI
-from langchain.agents import initialize_agent
-from langchain.agents import AgentType
-from langchain.tools import ShellTool
-from dotenv import find_dotenv, load_dotenv
-import warnings
-warnings.filterwarnings("ignore")
-load_dotenv(find_dotenv())
-from langchain.callbacks import HumanApprovalCallbackHandler
+import platform
+import distro
+import os
+import sys
 
-def _should_check(serialized_obj: dict) -> bool:
-    # Only require approval on ShellTool.
-    return serialized_obj.get("name") == "terminal"
+from ChatModeFactory import ChatModeFactory
+from shell import Shell
 
+if __name__ == "__main__":
+    os_name = platform.system()
+    if os_name == 'Windows':
+        os.environ["OS_NAME"] = 'Windows'
+    elif os_name == 'Darwin':
+        os.environ["OS_NAME"] = 'Apple macOS'
+    elif os_name == 'Linux':
+        os.environ["OS_NAME"] = distro.name(pretty=True)
+    else:
+        os.environ["OS_NAME"] = 'Linux'
 
-def _approve(_input: str) -> bool:
-    if _input == "echo 'Hello World'":
-        return True
-    msg = (
-        "Approve (y\Y)?"
-    )
-    msg += "\n\n" + _input + "\n"
-    resp = input(msg)
-    return resp.lower() in ("yes", "y")
+    if os.name == 'nt':
+        os.environ["SHELL_NAME"] = os.environ.get('COMSPEC', 'Unknown shell')
+    elif os.name == 'posix':
+        os.environ["SHELL_NAME"] = os.environ.get('SHELL', 'Unknown shell')
+    else:
+        os.environ["SHELL_NAME"] = 'Bash'
 
+    PROMPT_TEMPLATE = """If someone asks you to perform a task, your job is to come up with a series of shell 
+    commands that will perform the task. Ensure the commands are for the OS {os_name} and the shell {shell_name} Make 
+    sure to reason step by step, using this format: Question: "copy the files in the directory named 'target' into a 
+    new directory at the same level as target called 'myNewDirectory'" I need to take the following actions: - List 
+    all files in the directory - Create a new directory - Copy the files from the first directory into the second 
+    directory ```ComPmand: ls mkdir myNewDirectory cp -r target/* myNewDirectory ``` That is the format. Begin! {
+    chat_history} Question: {question}"""
 
-callbacks = [HumanApprovalCallbackHandler(should_check=_should_check, approve=_approve)]
-
-shell_tool = ShellTool(callbacks=callbacks)
-llm = ChatOpenAI(temperature=0)
-
-shell_tool.description = shell_tool.description + f"args {shell_tool.args}".replace(
-    "{", "{{"
-).replace("}", "}}")
-
-self_ask_with_search = initialize_agent(
-    [shell_tool], llm, agent=AgentType.CHAT_ZERO_SHOT_REACT_DESCRIPTION, verbose=True
-)
-
-print(self_ask_with_search.run(
-    "List all processes running in port 3010"
-))
+    arguments = sys.argv
+    chat_mode_flag = "short" if len(arguments) == 2 else "long"
+    chat_mode_factory = ChatModeFactory()
+    response_strategy = chat_mode_factory.get_chat_mode(chat_mode_flag)
+    shell = Shell(response_strategy)
+    shell.repl()
