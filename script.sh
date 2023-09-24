@@ -22,6 +22,7 @@ deactivate
 script_name="main.py"
 
 current_dir=$(pwd)
+echo "OPENAI_API_KEY=\"$OPENAI_API_KEY\"" > "$current_dir/.env"
 
 bashrc_path="$HOME/.bashrc"
 zshrc_path="$HOME/.zshrc"
