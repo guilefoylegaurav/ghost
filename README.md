@@ -4,6 +4,10 @@
 
 Created by [Gaurav](https://www.github.com/guilefoylegaurav) and [Sougata](https://github.com/sougata-fincent), this is our submission for [Replit's GenAI Hackathon](https://peerlist.io/hackathon)
 
+# Safety Concerns
+
+Ghost has default safe mode (asks for approval before executing command). If you feel comfortable giving Ghost the freedom to execute commands on its own, do so at your own risk.
+
 # Prerequisites
 
  - System using Ubuntu/MacOS
