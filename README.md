@@ -13,7 +13,7 @@
  Run this
 
 
-    curl -L -O https://github.com/guilefoylegaurav/ghost/archive/refs/heads/main.zip && unzip main.zip && cd ghost-main && chmod +x script.sh && ./script.sh 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
+    curl -L -O https://github.com/guilefoylegaurav/ghost/archive/refs/heads/main.zip && unzip main.zip && cd ghost-main && chmod +x script.sh && ./script.sh <OPEN_AI_API_KEY>
 
 Then try invoking ghost in your terminal 
 
