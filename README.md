@@ -24,6 +24,10 @@ Then try invoking ghost in your terminal
 
 ghost has default safe mode (asks for approval before executing command) 
 
+ # Screenshots
+
+![Downloading sdkman, then gradle 5.8 and setting it to system default using Ghost](temp.png)
+
 
 
  
