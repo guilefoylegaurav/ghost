@@ -18,6 +18,10 @@ class ShortChatMode(ChatMode):
 
 class ProlongedChatMode(ChatMode):
     def respond(self, agent) -> None:
+        print(
+            "Hello! I am ghost, a command line utility that lets you communicate with your terminal and get tasks "
+            "done USING NATURAL LANGUAGE!")
+        print("What do you want me to do?")
         while True:
             question = input(">")
             if question == "exit":
