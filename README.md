@@ -33,7 +33,7 @@ ghost has default safe mode (asks for approval before executing command)
  # Screenshots
 
 ![Downloading sdkman, then gradle 5.8 and setting it to system default using Ghost](temp.png)
-
+![Building dockerfile and spinning up a container from the image](ss2.png)
 
 
  
