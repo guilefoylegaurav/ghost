@@ -2,6 +2,8 @@
 
 **ghost** is a utlity that allows you to communicate with your terminal in natural language! Tell ghost what you need to get done, it'll try to figure out the necessary commands on its own and get your job done! 
 
+Created by [Gaurav](https://www.github.com/guilefoylegaurav) and [Sougata](https://github.com/sougata-fincent), this is our submission for [Replit's GenAI Hackathon](https://peerlist.io/hackathon)
+
 # Prerequisites
 
  - System using Ubuntu/MacOS
